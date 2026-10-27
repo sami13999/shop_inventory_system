@@ -45,7 +45,7 @@ export default function StatCard({ title, value, subtitle, icon: Icon, color = '
     <div 
       className="glass-panel glass-panel-hover animate-slide-up"
       style={{ 
-        padding: '22px 24px', 
+        padding: '14px 18px', 
         position: 'relative', 
         overflow: 'hidden',
         animationDelay: `${delay}s`
@@ -54,13 +54,13 @@ export default function StatCard({ title, value, subtitle, icon: Icon, color = '
       {/* Ambient Radial Glow in background */}
       <div style={{
         position: 'absolute',
-        top: '-20px',
-        right: '-20px',
-        width: '120px',
-        height: '120px',
+        top: '-15px',
+        right: '-15px',
+        width: '90px',
+        height: '90px',
         borderRadius: '50%',
         background: scheme.glow,
-        filter: 'blur(40px)',
+        filter: 'blur(30px)',
         opacity: 0.45,
         pointerEvents: 'none'
       }} />
@@ -68,18 +68,18 @@ export default function StatCard({ title, value, subtitle, icon: Icon, color = '
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', position: 'relative', zIndex: 1 }}>
         <div>
           <p style={{ 
-            fontSize: '11px', 
+            fontSize: '10.5px', 
             fontWeight: 800, 
             color: 'var(--text-secondary)', 
             textTransform: 'uppercase', 
             letterSpacing: '0.06em', 
-            marginBottom: '8px' 
+            marginBottom: '6px' 
           }}>
             {title}
           </p>
           <h2 
             style={{ 
-              fontSize: '28px', 
+              fontSize: '22px', 
               fontWeight: 800, 
               color: 'var(--text-primary)', 
               margin: 0, 
@@ -90,35 +90,36 @@ export default function StatCard({ title, value, subtitle, icon: Icon, color = '
             {value}
           </h2>
           {subtitle && (
-            <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '6px' }}>
+            <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px' }}>
               {subtitle}
             </p>
           )}
         </div>
         {Icon && (
           <div style={{
-            width: '48px',
-            height: '48px',
-            borderRadius: '14px',
+            width: '38px',
+            height: '38px',
+            borderRadius: '11px',
             backgroundColor: scheme.bg,
             border: `1px solid ${scheme.border}`,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             color: scheme.icon,
-            boxShadow: `0 4px 14px ${scheme.glow}`,
-            transition: 'transform 0.25s ease'
+            boxShadow: `0 3px 10px ${scheme.glow}`,
+            transition: 'transform 0.25s ease',
+            flexShrink: 0
           }}>
-            <Icon size={24} />
+            <Icon size={19} />
           </div>
         )}
       </div>
 
       {/* Decorative Bottom Progress Accent */}
-      <div style={{ marginTop: '16px', paddingTop: '10px', borderTop: '1px solid var(--border-subtle)', position: 'relative', zIndex: 1 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '12px', color: 'var(--text-secondary)' }}>
+      <div style={{ marginTop: '10px', paddingTop: '8px', borderTop: '1px solid var(--border-subtle)', position: 'relative', zIndex: 1 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '11px', color: 'var(--text-secondary)' }}>
           <span>{trend}</span>
-          <span style={{ width: '32px', height: '3px', borderRadius: '2px', backgroundColor: scheme.bar, display: 'inline-block' }} />
+          <span style={{ width: '28px', height: '3px', borderRadius: '2px', backgroundColor: scheme.bar, display: 'inline-block' }} />
         </div>
       </div>
     </div>

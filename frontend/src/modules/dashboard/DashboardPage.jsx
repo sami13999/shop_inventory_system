@@ -18,6 +18,7 @@ import {
 import StatCard from '../../components/ui/StatCard';
 import Badge from '../../components/ui/Badge';
 import { dashboardApi } from '../../api/client';
+import OperationalAnalyticsGraph from './components/OperationalAnalyticsGraph';
 
 export default function DashboardPage() {
   const [data, setData] = useState(null);
@@ -57,25 +58,25 @@ export default function DashboardPage() {
   const healthyCount = Math.max(0, totalProducts - lowStockCount - outOfStockCount);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '26px' }} className="animate-fade-in">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }} className="animate-fade-in">
       {/* Executive Welcome Hero Banner */}
       <div 
         className="glass-panel" 
         style={{
-          padding: '28px 32px',
+          padding: '16px 22px',
           background: 'linear-gradient(135deg, var(--primary-subtle) 0%, rgba(139, 92, 246, 0.08) 50%, var(--success-subtle) 100%)',
           border: '1px solid var(--border-hover)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           flexWrap: 'wrap',
-          gap: '20px'
+          gap: '14px'
         }}
       >
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
             <span style={{ 
-              fontSize: '11px', 
+              fontSize: '10.5px', 
               fontWeight: 800, 
               textTransform: 'uppercase', 
               letterSpacing: '0.08em', 
@@ -84,35 +85,35 @@ export default function DashboardPage() {
               alignItems: 'center',
               gap: '4px'
             }}>
-              <Sparkles size={13} />
+              <Sparkles size={12} />
               Enterprise Store Command Center
             </span>
             <span className="live-beacon" />
           </div>
-          <h2 style={{ fontSize: '26px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
+          <h2 style={{ fontSize: '20px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
             Shop Financials & Live Khata Overview
           </h2>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '13.5px', marginTop: '6px' }}>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '12px', marginTop: '3px' }}>
             Real-time calculations computed directly from MySQL relational transactions with 0 SQL views.
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
           <button 
             onClick={() => fetchMetrics(true)} 
-            className="btn btn-secondary" 
+            className="btn btn-secondary btn-sm" 
             title="Refresh Live Data"
             disabled={refreshing}
           >
-            <RefreshCw size={14} style={{ animation: refreshing ? 'spinSlow 0.8s linear infinite' : 'none' }} />
+            <RefreshCw size={13} style={{ animation: refreshing ? 'spinSlow 0.8s linear infinite' : 'none' }} />
             <span>{refreshing ? 'Updating...' : 'Sync Live'}</span>
           </button>
           <button 
             onClick={() => navigate('/pos')} 
-            className="btn btn-primary btn-lg" 
-            style={{ gap: '8px' }}
+            className="btn btn-primary" 
+            style={{ gap: '7px', padding: '7px 15px', fontSize: '12.5px' }}
           >
-            <ShoppingCart size={17} />
+            <ShoppingCart size={15} />
             <span>Launch POS Terminal</span>
           </button>
         </div>
@@ -120,11 +121,12 @@ export default function DashboardPage() {
 
       {error && (
         <div style={{
-          padding: '14px 18px',
+          padding: '12px 16px',
           borderRadius: 'var(--radius-md)',
           backgroundColor: 'var(--danger-subtle)',
           border: '1px solid rgba(244, 63, 94, 0.3)',
-          color: '#fb7185'
+          color: '#fb7185',
+          fontSize: '12px'
         }}>
           {error}
         </div>
@@ -133,8 +135,8 @@ export default function DashboardPage() {
       {/* KPI Stat Cards Grid with Staggered Entrance */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-        gap: '20px'
+        gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+        gap: '14px'
       }}>
         <StatCard
           title="Total Gross Revenue"
@@ -177,97 +179,33 @@ export default function DashboardPage() {
         />
       </div>
 
-      {/* Quick Launch & Inventory Health Bar */}
-      <div className="glass-panel" style={{ padding: '20px 24px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', flexWrap: 'wrap', gap: '10px' }}>
-          <div>
-            <h3 style={{ fontSize: '15px', fontWeight: 700, margin: 0, color: 'var(--text-primary)' }}>
-              Inventory Health Gauge
-            </h3>
-            <p style={{ fontSize: '12px', color: 'var(--text-secondary)', margin: 0 }}>
-              Live stock ratio across active product catalog
-            </p>
-          </div>
-          <div style={{ display: 'flex', gap: '16px', fontSize: '12px' }}>
-            <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#10b981' }} />
-              Healthy: <strong className="font-mono">{healthyCount}</strong>
-            </span>
-            <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#f59e0b' }} />
-              Low Stock: <strong className="font-mono">{lowStockCount}</strong>
-            </span>
-            <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#f43f5e' }} />
-              Out of Stock: <strong className="font-mono">{outOfStockCount}</strong>
-            </span>
-          </div>
-        </div>
-
-        {/* Visual Progress Bar */}
-        <div style={{
-          height: '10px',
-          width: '100%',
-          backgroundColor: 'var(--bg-subtle)',
-          borderRadius: 'var(--radius-full)',
-          overflow: 'hidden',
-          display: 'flex'
-        }}>
-          {totalProducts > 0 && (
-            <>
-              <div 
-                style={{ 
-                  width: `${(healthyCount / totalProducts) * 100}%`, 
-                  backgroundColor: '#10b981',
-                  transition: 'width 0.6s ease'
-                }} 
-                title={`Healthy: ${healthyCount}`}
-              />
-              <div 
-                style={{ 
-                  width: `${(lowStockCount / totalProducts) * 100}%`, 
-                  backgroundColor: '#f59e0b',
-                  transition: 'width 0.6s ease'
-                }} 
-                title={`Low: ${lowStockCount}`}
-              />
-              <div 
-                style={{ 
-                  width: `${(outOfStockCount / totalProducts) * 100}%`, 
-                  backgroundColor: '#f43f5e',
-                  transition: 'width 0.6s ease'
-                }} 
-                title={`Out: ${outOfStockCount}`}
-              />
-            </>
-          )}
-        </div>
-      </div>
+      {/* Operational Health & Analytics Studio (Replaces simple line gauge) */}
+      <OperationalAnalyticsGraph data={data} />
 
       {/* Two Column Layout: Recent Transactions & Low Stock Alerts */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(440px, 1fr))',
-        gap: '24px'
+        gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+        gap: '16px'
       }}>
         {/* Recent Sales Invoices */}
-        <div className="glass-panel animate-slide-up stagger-3" style={{ padding: '24px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
+        <div className="glass-panel animate-slide-up stagger-3" style={{ padding: '16px 18px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
             <div>
-              <h3 style={{ fontSize: '16px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
+              <h3 style={{ fontSize: '14.5px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
                 Recent Sales Transactions
               </h3>
-              <p style={{ fontSize: '12px', color: 'var(--text-secondary)', margin: 0 }}>
+              <p style={{ fontSize: '11px', color: 'var(--text-secondary)', margin: 0 }}>
                 Latest invoices recorded in system
               </p>
             </div>
             <button
               onClick={() => navigate('/bills')}
               className="btn btn-secondary btn-sm"
-              style={{ fontSize: '11px', padding: '5px 12px', gap: '5px' }}
+              style={{ fontSize: '11px', padding: '4px 10px', gap: '4px' }}
             >
               <span>View All</span>
-              <ArrowRight size={13} />
+              <ArrowRight size={12} />
             </button>
           </div>
 
@@ -285,7 +223,7 @@ export default function DashboardPage() {
               <tbody>
                 {(!data?.recent_bills || data.recent_bills.length === 0) ? (
                   <tr>
-                    <td colSpan={5} style={{ textAlign: 'center', padding: '32px', color: 'var(--text-muted)' }}>
+                    <td colSpan={5} style={{ textAlign: 'center', padding: '24px', color: 'var(--text-muted)' }}>
                       No recent sales transactions recorded yet.
                     </td>
                   </tr>
@@ -315,24 +253,24 @@ export default function DashboardPage() {
         </div>
 
         {/* Low Stock Alerts */}
-        <div className="glass-panel animate-slide-up stagger-4" style={{ padding: '24px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
+        <div className="glass-panel animate-slide-up stagger-4" style={{ padding: '16px 18px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
             <div>
-              <h3 style={{ fontSize: '16px', fontWeight: 800, margin: 0, display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-primary)' }}>
-                <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--danger)' }} />
+              <h3 style={{ fontSize: '14.5px', fontWeight: 800, margin: 0, display: 'flex', alignItems: 'center', gap: '7px', color: 'var(--text-primary)' }}>
+                <span style={{ width: '7px', height: '7px', borderRadius: '50%', backgroundColor: 'var(--danger)' }} />
                 <span>Low Stock Inventory Alerts</span>
               </h3>
-              <p style={{ fontSize: '12px', color: 'var(--text-secondary)', margin: 0 }}>
+              <p style={{ fontSize: '11px', color: 'var(--text-secondary)', margin: 0 }}>
                 Items that need stock procurement
               </p>
             </div>
             <button
               onClick={() => navigate('/purchases')}
               className="btn btn-primary btn-sm"
-              style={{ fontSize: '11px', padding: '5px 12px', gap: '5px' }}
+              style={{ fontSize: '11px', padding: '4px 10px', gap: '4px' }}
             >
               <span>Procure Stock</span>
-              <ArrowUpRight size={13} />
+              <ArrowUpRight size={12} />
             </button>
           </div>
 

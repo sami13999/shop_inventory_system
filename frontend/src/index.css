@@ -139,6 +139,7 @@
 }
 
 body {
+  zoom: 0.82;
   background-color: var(--bg-main);
   background-image: 
     radial-gradient(at 15% 15%, var(--primary-subtle) 0px, transparent 50%),
@@ -337,7 +338,7 @@ button, input, select, textarea {
 }
 
 .sidebar {
-  width: 260px;
+  width: 225px;
   background: var(--bg-sidebar);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
@@ -349,19 +350,28 @@ button, input, select, textarea {
   bottom: 0;
   left: 0;
   z-index: 40;
-  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sidebar.closed {
+  transform: translateX(-100%);
 }
 
 .main-content {
   flex: 1;
-  margin-left: 260px;
+  margin-left: 225px;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  transition: margin-left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.main-content.sidebar-closed {
+  margin-left: 0;
 }
 
 .top-header {
-  height: 70px;
+  height: 54px;
   background: var(--bg-header);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -369,14 +379,14 @@ button, input, select, textarea {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 28px;
+  padding: 0 20px;
   position: sticky;
   top: 0;
   z-index: 30;
 }
 
 .page-container {
-  padding: 26px 30px 48px;
+  padding: 14px 20px 32px;
   flex: 1;
   animation: fadeIn 0.3s ease;
 }
@@ -388,10 +398,10 @@ button, input, select, textarea {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 7px;
   font-weight: 600;
-  font-size: 13px;
-  padding: 9px 16px;
+  font-size: 12px;
+  padding: 7px 14px;
   border-radius: var(--radius-md);
   cursor: pointer;
   border: 1px solid transparent;
@@ -466,22 +476,22 @@ button, input, select, textarea {
 
 /* Sizes */
 .btn-sm {
-  padding: 6px 12px;
-  font-size: 12px;
+  padding: 5px 11px;
+  font-size: 11.5px;
   border-radius: var(--radius-sm);
 }
 
 .btn-lg {
-  padding: 12px 24px;
-  font-size: 15px;
-  border-radius: var(--radius-lg);
+  padding: 8px 18px;
+  font-size: 13px;
+  border-radius: var(--radius-md);
   font-weight: 700;
 }
 
 /* Icon-only Button */
 .btn-icon {
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   padding: 0;
   border-radius: var(--radius-md);
 }
@@ -492,9 +502,9 @@ button, input, select, textarea {
 .badge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 4px 10px;
-  font-size: 11px;
+  gap: 5px;
+  padding: 3px 8px;
+  font-size: 10.5px;
   font-weight: 700;
   border-radius: var(--radius-full);
   letter-spacing: 0.03em;
@@ -502,8 +512,8 @@ button, input, select, textarea {
 }
 
 .badge-dot {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
   display: inline-block;
 }
@@ -569,12 +579,12 @@ button, input, select, textarea {
 
 .form-input, .form-select, .form-textarea {
   width: 100%;
-  padding: 10px 14px;
+  padding: 8px 12px;
   background: var(--bg-input);
   border: 1px solid var(--border-card);
   border-radius: var(--radius-md);
   color: var(--text-primary);
-  font-size: 13.5px;
+  font-size: 12.5px;
   outline: none;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -610,8 +620,8 @@ button, input, select, textarea {
 
 .modern-table th {
   background: var(--bg-subtle);
-  padding: 14px 18px;
-  font-size: 11px;
+  padding: 9px 13px;
+  font-size: 10.5px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -621,10 +631,10 @@ button, input, select, textarea {
 }
 
 .modern-table td {
-  padding: 14px 18px;
+  padding: 9px 13px;
   border-bottom: 1px solid var(--border-subtle);
   color: var(--text-primary);
-  font-size: 13px;
+  font-size: 12px;
   vertical-align: middle;
   transition: background-color 0.15s ease;
 }

@@ -1,10 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Header from './Header';
 
 export default function AppLayout() {
   const location = useLocation();
+
+  const [sidebarOpen, setSidebarOpen] = useState(() => {
+    const saved = localStorage.getItem('aurapos_sidebar_open');
+    return saved !== null ? saved === 'true' : true;
+  });
+
+  const toggleSidebar = () => {
+    setSidebarOpen(prev => {
+      const next = !prev;
+      localStorage.setItem('aurapos_sidebar_open', String(next));
+      return next;
+    });
+  };
 
   const getPageInfo = () => {
     switch (location.pathname) {
@@ -31,9 +44,14 @@ export default function AppLayout() {
 
   return (
     <div className="app-layout">
-      <Sidebar />
-      <div className="main-content">
-        <Header pageTitle={title} pageSubtitle={subtitle} />
+      <Sidebar isOpen={sidebarOpen} onToggle={toggleSidebar} />
+      <div className={`main-content ${!sidebarOpen ? 'sidebar-closed' : ''}`}>
+        <Header 
+          pageTitle={title} 
+          pageSubtitle={subtitle} 
+          sidebarOpen={sidebarOpen} 
+          onToggleSidebar={toggleSidebar} 
+        />
         <main className="page-container">
           <Outlet />
         </main>
