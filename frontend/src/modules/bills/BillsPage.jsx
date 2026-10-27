@@ -86,7 +86,7 @@ export default function BillsPage() {
   const formatCurrency = (val) => `Rs ${Number(val || 0).toFixed(2)}`;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '22px' }} className="animate-fade-in">
       {/* Search and Filters */}
       <div className="glass-panel" style={{ padding: '18px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '14px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1, minWidth: '280px' }}>

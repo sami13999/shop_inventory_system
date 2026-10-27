@@ -165,39 +165,42 @@ export default function ProductsPage() {
   const formatCurrency = (val) => `Rs ${Number(val || 0).toFixed(2)}`;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '22px' }} className="animate-fade-in">
       {/* Low Stock Warning Banner */}
       {lowStockCount > 0 && (
         <div style={{
-          padding: '14px 20px',
+          padding: '16px 22px',
           borderRadius: 'var(--radius-lg)',
-          background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(244, 63, 94, 0.12) 100%)',
-          border: '1px solid rgba(245, 158, 11, 0.3)',
+          background: 'linear-gradient(135deg, var(--warning-subtle) 0%, var(--danger-subtle) 100%)',
+          border: '1px solid rgba(245, 158, 11, 0.35)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           flexWrap: 'wrap',
-          gap: '12px'
-        }}>
+          gap: '14px',
+          boxShadow: 'var(--shadow-sm)'
+        }} className="animate-slide-up">
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <div style={{
-              width: '36px',
-              height: '36px',
-              borderRadius: '10px',
-              backgroundColor: 'rgba(245, 158, 11, 0.2)',
+              width: '40px',
+              height: '40px',
+              borderRadius: '12px',
+              backgroundColor: 'var(--warning-subtle)',
+              border: '1px solid rgba(245, 158, 11, 0.3)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#fbbf24'
+              color: 'var(--warning)',
+              boxShadow: '0 2px 10px var(--warning-glow)'
             }}>
-              <AlertTriangle size={20} />
+              <AlertTriangle size={22} />
             </div>
             <div>
-              <h4 style={{ margin: 0, fontSize: '14px', fontWeight: 700, color: '#fef3c7' }}>
-                Inventory Alert: {lowStockCount} product{lowStockCount > 1 ? 's' : ''} low on stock
+              <h4 style={{ margin: 0, fontSize: '14.5px', fontWeight: 800, color: 'var(--text-primary)' }}>
+                Inventory Notice: {lowStockCount} product{lowStockCount > 1 ? 's' : ''} low on stock
               </h4>
-              <p style={{ margin: 0, fontSize: '12px', color: '#fde68a' }}>
-                Items have dropped to or below the safety threshold of 10 units.
+              <p style={{ margin: 0, fontSize: '12.5px', color: 'var(--text-secondary)' }}>
+                Units have dropped to or below the safety threshold of 10 units.
               </p>
             </div>
           </div>
@@ -205,8 +208,9 @@ export default function ProductsPage() {
             onClick={() => setOnlyLowStock(prev => !prev)}
             className="btn btn-sm"
             style={{
-              backgroundColor: onlyLowStock ? '#f59e0b' : 'rgba(255, 255, 255, 0.1)',
-              color: onlyLowStock ? '#000' : '#fff',
+              backgroundColor: onlyLowStock ? 'var(--warning)' : 'var(--bg-subtle)',
+              color: onlyLowStock ? '#ffffff' : 'var(--text-primary)',
+              borderColor: 'var(--border-subtle)',
               fontWeight: 700
             }}
           >

@@ -149,7 +149,7 @@ export default function CustomersPage() {
   const totalOutstandingDue = khataLedger.reduce((acc, c) => acc + Number(c.remaining_balance || 0), 0);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '22px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '22px' }} className="animate-fade-in">
       {/* Top Banner Overview */}
       <div className="glass-panel" style={{
         padding: '24px 28px',

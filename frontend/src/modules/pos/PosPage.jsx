@@ -11,7 +11,9 @@ import {
   CreditCard,
   User,
   ArrowRight,
-  Layers
+  Layers,
+  Sparkles,
+  Zap
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { productsApi, categoriesApi, customersApi, billsApi } from '../../api/client';
@@ -157,8 +159,12 @@ export default function PosPage() {
     paymentStatus = 'partial';
   }
 
-  // Quick Cash Helper
+  // Quick Cash Presets
   const setExactCash = () => setPaidAmount(totalAmount.toString());
+  const addCashPreset = (extra) => {
+    const current = parseFloat(paidAmount) || totalAmount;
+    setPaidAmount((current + extra).toString());
+  };
 
   // Quick Customer Creation
   const handleCreateCustomer = async (e) => {
@@ -216,18 +222,17 @@ export default function PosPage() {
 
       const res = await billsApi.create(payload);
       if (res.success && res.data) {
-        // Trigger celebration confetti!
+        // Trigger celebratory confetti burst!
         try {
           confetti({
-            particleCount: 80,
-            spread: 60,
-            origin: { y: 0.7 }
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 }
           });
         } catch {}
 
         setCompletedBill(res.data);
         setIsReceiptOpen(true);
-        // Refresh catalog inventory numbers
         loadCatalog();
       }
     } catch (err) {
@@ -244,26 +249,29 @@ export default function PosPage() {
   };
 
   return (
-    <div style={{
-      display: 'grid',
-      gridTemplateColumns: 'minmax(0, 1.6fr) minmax(360px, 1fr)',
-      gap: '24px',
-      alignItems: 'start'
-    }}>
+    <div 
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'minmax(0, 1.6fr) minmax(360px, 1fr)',
+        gap: '24px',
+        alignItems: 'start'
+      }}
+      className="animate-fade-in"
+    >
       {/* Left Column: Catalog & Products */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
         {/* Search & Category Pills Bar */}
-        <div className="glass-panel" style={{ padding: '16px 20px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+        <div className="glass-panel" style={{ padding: '18px 22px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
           <div style={{ position: 'relative' }}>
             <input
               type="text"
               className="form-input"
-              style={{ paddingLeft: '38px', height: '42px', fontSize: '14px' }}
+              style={{ paddingLeft: '40px', height: '44px', fontSize: '14px' }}
               placeholder="Search product by name, barcode, or category..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
-            <Search size={18} style={{ position: 'absolute', left: '12px', top: '12px', color: 'var(--text-muted)' }} />
+            <Search size={18} style={{ position: 'absolute', left: '14px', top: '13px', color: 'var(--text-muted)' }} />
           </div>
 
           {/* Category Filter Pills */}
@@ -272,15 +280,17 @@ export default function PosPage() {
               onClick={() => setSelectedCategory(null)}
               className="btn btn-sm"
               style={{
-                borderRadius: '999px',
-                padding: '6px 14px',
-                backgroundColor: selectedCategory === null ? 'var(--primary)' : 'rgba(255, 255, 255, 0.05)',
-                color: selectedCategory === null ? '#fff' : 'var(--text-secondary)',
-                border: '1px solid var(--border-subtle)',
-                whiteSpace: 'nowrap'
+                borderRadius: 'var(--radius-full)',
+                padding: '7px 16px',
+                backgroundColor: selectedCategory === null ? 'var(--primary)' : 'var(--bg-subtle)',
+                color: selectedCategory === null ? '#ffffff' : 'var(--text-secondary)',
+                border: selectedCategory === null ? '1px solid var(--primary)' : '1px solid var(--border-subtle)',
+                boxShadow: selectedCategory === null ? '0 2px 10px var(--primary-glow)' : 'none',
+                whiteSpace: 'nowrap',
+                fontWeight: 700
               }}
             >
-              All Categories ({products.length})
+              All Products ({products.length})
             </button>
             {categories.map(cat => (
               <button
@@ -288,12 +298,14 @@ export default function PosPage() {
                 onClick={() => setSelectedCategory(cat.category_id)}
                 className="btn btn-sm"
                 style={{
-                  borderRadius: '999px',
-                  padding: '6px 14px',
-                  backgroundColor: selectedCategory === cat.category_id ? 'var(--primary)' : 'rgba(255, 255, 255, 0.05)',
-                  color: selectedCategory === cat.category_id ? '#fff' : 'var(--text-secondary)',
-                  border: '1px solid var(--border-subtle)',
-                  whiteSpace: 'nowrap'
+                  borderRadius: 'var(--radius-full)',
+                  padding: '7px 16px',
+                  backgroundColor: selectedCategory === cat.category_id ? 'var(--primary)' : 'var(--bg-subtle)',
+                  color: selectedCategory === cat.category_id ? '#ffffff' : 'var(--text-secondary)',
+                  border: selectedCategory === cat.category_id ? '1px solid var(--primary)' : '1px solid var(--border-subtle)',
+                  boxShadow: selectedCategory === cat.category_id ? '0 2px 10px var(--primary-glow)' : 'none',
+                  whiteSpace: 'nowrap',
+                  fontWeight: 700
                 }}
               >
                 {cat.category_name}
@@ -305,7 +317,7 @@ export default function PosPage() {
         {/* Product Grid */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(185px, 1fr))',
           gap: '16px',
           maxHeight: 'calc(100vh - 250px)',
           overflowY: 'auto',
@@ -319,34 +331,33 @@ export default function PosPage() {
             return (
               <div
                 key={product.product_id}
-                className="glass-panel"
+                className="glass-panel glass-panel-hover"
                 onClick={() => !isOutOfStock && addToCart(product)}
                 style={{
                   padding: '16px',
                   cursor: isOutOfStock ? 'not-allowed' : 'pointer',
-                  opacity: isOutOfStock ? 0.5 : 1,
+                  opacity: isOutOfStock ? 0.45 : 1,
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'space-between',
                   gap: '12px',
                   position: 'relative',
-                  border: inCart ? '1px solid var(--primary)' : '1px solid var(--border-subtle)',
-                  boxShadow: inCart ? '0 0 16px var(--primary-glow)' : 'var(--shadow-sm)',
-                  transform: 'translateZ(0)'
+                  border: inCart ? '1.5px solid var(--primary)' : '1px solid var(--border-card)',
+                  boxShadow: inCart ? '0 0 20px var(--primary-glow)' : 'var(--shadow-sm)'
                 }}
               >
                 <div>
-                  <span style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.04em', color: 'var(--text-muted)' }}>
+                  <span style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.04em', color: 'var(--text-muted)', fontWeight: 700 }}>
                     {product.category_name || 'General'}
                   </span>
-                  <h4 style={{ fontSize: '14px', fontWeight: 700, margin: '4px 0 6px', color: '#fff', lineHeight: 1.3 }}>
+                  <h4 style={{ fontSize: '14px', fontWeight: 800, margin: '4px 0 6px', color: 'var(--text-primary)', lineHeight: 1.3 }}>
                     {product.name}
                   </h4>
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 'auto' }}>
                   <div>
-                    <span style={{ fontSize: '15px', fontWeight: 800, color: '#818cf8' }} className="font-mono">
+                    <span style={{ fontSize: '16px', fontWeight: 800, color: 'var(--primary)' }} className="font-mono">
                       Rs {Number(product.selling_price).toFixed(2)}
                     </span>
                   </div>
@@ -356,7 +367,7 @@ export default function PosPage() {
                   ) : isLow ? (
                     <span className="badge badge-warning">{product.stock_quantity} left</span>
                   ) : (
-                    <span className="badge badge-success">{product.stock_quantity} in stock</span>
+                    <span className="badge badge-success">{product.stock_quantity} left</span>
                   )}
                 </div>
 
@@ -365,16 +376,17 @@ export default function PosPage() {
                     position: 'absolute',
                     top: '8px',
                     right: '8px',
-                    width: '22px',
-                    height: '22px',
+                    width: '24px',
+                    height: '24px',
                     borderRadius: '50%',
                     backgroundColor: 'var(--primary)',
-                    color: '#fff',
+                    color: '#ffffff',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     fontSize: '11px',
-                    fontWeight: 800
+                    fontWeight: 800,
+                    boxShadow: '0 2px 8px var(--primary-glow)'
                   }}>
                     {inCart.quantity}
                   </div>
@@ -386,19 +398,29 @@ export default function PosPage() {
       </div>
 
       {/* Right Column: Interactive Cart & Checkout Panel */}
-      <div className="glass-panel" style={{ padding: '22px', position: 'sticky', top: '88px', display: 'flex', flexDirection: 'column', gap: '18px' }}>
+      <div 
+        className="glass-panel animate-slide-up stagger-2" 
+        style={{ 
+          padding: '24px', 
+          position: 'sticky', 
+          top: '90px', 
+          display: 'flex', 
+          flexDirection: 'column', 
+          gap: '18px' 
+        }}
+      >
         {/* Cart Header & Customer Selector */}
         <div style={{ borderBottom: '1px solid var(--border-subtle)', paddingBottom: '16px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-            <h3 style={{ fontSize: '18px', fontWeight: 800, margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <h3 style={{ fontSize: '18px', fontWeight: 800, margin: 0, display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-primary)' }}>
               <ShoppingBag size={20} color="var(--primary)" />
               <span>Current Cart</span>
               <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)' }}>
-                ({cart.length} items)
+                ({cart.length} item{cart.length === 1 ? '' : 's'})
               </span>
             </h3>
             {cart.length > 0 && (
-              <button onClick={clearCart} className="btn btn-secondary btn-sm" style={{ padding: '4px 8px', fontSize: '11px' }}>
+              <button onClick={clearCart} className="btn btn-secondary btn-sm" style={{ padding: '4px 10px', fontSize: '11px' }}>
                 Clear
               </button>
             )}
@@ -411,9 +433,10 @@ export default function PosPage() {
               className="btn btn-sm"
               style={{
                 flex: 1,
-                backgroundColor: isWalkIn ? 'rgba(99, 102, 241, 0.2)' : 'rgba(255, 255, 255, 0.04)',
+                backgroundColor: isWalkIn ? 'var(--primary-subtle)' : 'var(--bg-subtle)',
                 borderColor: isWalkIn ? 'var(--primary)' : 'var(--border-subtle)',
-                color: isWalkIn ? '#fff' : 'var(--text-secondary)'
+                color: isWalkIn ? 'var(--primary)' : 'var(--text-secondary)',
+                fontWeight: 700
               }}
             >
               Walk-in Customer
@@ -423,12 +446,13 @@ export default function PosPage() {
               className="btn btn-sm"
               style={{
                 flex: 1,
-                backgroundColor: !isWalkIn ? 'rgba(99, 102, 241, 0.2)' : 'rgba(255, 255, 255, 0.04)',
+                backgroundColor: !isWalkIn ? 'var(--primary-subtle)' : 'var(--bg-subtle)',
                 borderColor: !isWalkIn ? 'var(--primary)' : 'var(--border-subtle)',
-                color: !isWalkIn ? '#fff' : 'var(--text-secondary)'
+                color: !isWalkIn ? 'var(--primary)' : 'var(--text-secondary)',
+                fontWeight: 700
               }}
             >
-              Account / Khata
+              Khata Account
             </button>
           </div>
 
@@ -438,7 +462,7 @@ export default function PosPage() {
                 className="form-select"
                 value={selectedCustomer || ''}
                 onChange={(e) => setSelectedCustomer(e.target.value ? parseInt(e.target.value, 10) : null)}
-                style={{ flex: 1, height: '38px', fontSize: '13px' }}
+                style={{ flex: 1, height: '40px', fontSize: '13px' }}
               >
                 <option value="">-- Choose Customer --</option>
                 {customers.map(c => (
@@ -452,7 +476,7 @@ export default function PosPage() {
                 onClick={() => setIsCustomerModalOpen(true)}
                 className="btn btn-secondary btn-sm"
                 title="Add New Customer"
-                style={{ height: '38px', padding: '0 10px' }}
+                style={{ height: '40px', padding: '0 12px' }}
               >
                 <UserPlus size={16} />
               </button>
@@ -461,11 +485,11 @@ export default function PosPage() {
         </div>
 
         {/* Cart Items List */}
-        <div style={{ minHeight: '160px', maxHeight: '260px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        <div style={{ minHeight: '160px', maxHeight: '250px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '10px' }}>
           {cart.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '40px 10px', color: 'var(--text-muted)' }}>
+            <div style={{ textAlign: 'center', padding: '36px 10px', color: 'var(--text-muted)' }}>
               <ShoppingBag size={32} style={{ opacity: 0.3, marginBottom: '8px' }} />
-              <p style={{ margin: 0, fontSize: '13px' }}>Cart is empty. Select products from the left to start billing.</p>
+              <p style={{ margin: 0, fontSize: '13px' }}>Cart is empty. Select products from catalog to start billing.</p>
             </div>
           ) : (
             cart.map(item => (
@@ -477,12 +501,12 @@ export default function PosPage() {
                   justifyContent: 'space-between',
                   padding: '10px 12px',
                   borderRadius: 'var(--radius-md)',
-                  backgroundColor: 'rgba(255, 255, 255, 0.02)',
+                  backgroundColor: 'var(--bg-subtle)',
                   border: '1px solid var(--border-subtle)'
                 }}
               >
                 <div style={{ flex: 1, minWidth: 0, paddingRight: '8px' }}>
-                  <p style={{ margin: 0, fontWeight: 700, fontSize: '13px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  <p style={{ margin: 0, fontWeight: 700, fontSize: '13px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: 'var(--text-primary)' }}>
                     {item.name}
                   </p>
                   <p style={{ margin: 0, fontSize: '11px', color: 'var(--text-muted)' }} className="font-mono">
@@ -506,13 +530,13 @@ export default function PosPage() {
                     onChange={(e) => updateQuantity(item.product_id, e.target.value)}
                     className="font-mono"
                     style={{
-                      width: '40px',
+                      width: '42px',
                       height: '26px',
                       textAlign: 'center',
                       background: 'var(--bg-input)',
                       border: '1px solid var(--border-subtle)',
                       borderRadius: '4px',
-                      color: '#fff',
+                      color: 'var(--text-primary)',
                       fontSize: '12px'
                     }}
                   />
@@ -525,8 +549,8 @@ export default function PosPage() {
                   </button>
                 </div>
 
-                <div style={{ width: '80px', textAlign: 'right', paddingLeft: '8px' }}>
-                  <span className="font-mono" style={{ fontWeight: 700, fontSize: '13px' }}>
+                <div style={{ width: '84px', textAlign: 'right', paddingLeft: '8px' }}>
+                  <span className="font-mono" style={{ fontWeight: 800, fontSize: '13.5px', color: 'var(--text-primary)' }}>
                     Rs {item.line_total.toFixed(2)}
                   </span>
                 </div>
@@ -539,8 +563,11 @@ export default function PosPage() {
                     color: 'var(--text-muted)',
                     cursor: 'pointer',
                     padding: '4px',
-                    marginLeft: '4px'
+                    marginLeft: '4px',
+                    transition: 'color 0.2s ease'
                   }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--danger)')}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-muted)')}
                   title="Remove"
                 >
                   <Trash2 size={14} />
@@ -560,7 +587,7 @@ export default function PosPage() {
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px' }}>
             <span style={{ color: 'var(--text-secondary)' }}>Subtotal:</span>
-            <span className="font-mono" style={{ fontWeight: 600 }}>Rs {subtotal.toFixed(2)}</span>
+            <span className="font-mono" style={{ fontWeight: 700 }}>Rs {subtotal.toFixed(2)}</span>
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -573,14 +600,14 @@ export default function PosPage() {
               className="font-mono"
               placeholder="0.00"
               style={{
-                width: '100px',
-                height: '30px',
+                width: '105px',
+                height: '32px',
                 padding: '4px 8px',
                 textAlign: 'right',
                 background: 'var(--bg-input)',
-                border: '1px solid var(--border-subtle)',
+                border: '1px solid var(--border-card)',
                 borderRadius: '6px',
-                color: '#fff',
+                color: 'var(--text-primary)',
                 fontSize: '13px'
               }}
             />
@@ -591,27 +618,54 @@ export default function PosPage() {
             justifyContent: 'space-between',
             alignItems: 'center',
             padding: '8px 0',
-            borderTop: '1px solid rgba(255, 255, 255, 0.06)',
+            borderTop: '1px solid var(--border-subtle)',
             fontSize: '16px',
             fontWeight: 800
           }}>
-            <span>Total Payable:</span>
-            <span className="font-mono" style={{ color: '#818cf8', fontSize: '18px' }}>
+            <span style={{ color: 'var(--text-primary)' }}>Total Payable:</span>
+            <span className="font-mono" style={{ color: 'var(--primary)', fontSize: '19px' }}>
               Rs {totalAmount.toFixed(2)}
             </span>
           </div>
 
+          {/* Quick Cash Presets */}
+          <div style={{ display: 'flex', gap: '6px' }}>
+            <button
+              type="button"
+              onClick={setExactCash}
+              className="btn btn-secondary btn-sm"
+              style={{ flex: 1, padding: '4px 0', fontSize: '11px', fontWeight: 700 }}
+            >
+              Exact
+            </button>
+            <button
+              type="button"
+              onClick={() => addCashPreset(50)}
+              className="btn btn-secondary btn-sm"
+              style={{ flex: 1, padding: '4px 0', fontSize: '11px' }}
+            >
+              +50
+            </button>
+            <button
+              type="button"
+              onClick={() => addCashPreset(100)}
+              className="btn btn-secondary btn-sm"
+              style={{ flex: 1, padding: '4px 0', fontSize: '11px' }}
+            >
+              +100
+            </button>
+            <button
+              type="button"
+              onClick={() => addCashPreset(500)}
+              className="btn btn-secondary btn-sm"
+              style={{ flex: 1, padding: '4px 0', fontSize: '11px' }}
+            >
+              +500
+            </button>
+          </div>
+
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div>
-              <span style={{ color: 'var(--text-secondary)', fontSize: '13px', display: 'block' }}>Paid Amount:</span>
-              <button 
-                type="button" 
-                onClick={setExactCash}
-                style={{ fontSize: '10px', color: 'var(--primary)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
-              >
-                Exact Cash
-              </button>
-            </div>
+            <span style={{ color: 'var(--text-secondary)', fontSize: '13px' }}>Paid Amount:</span>
             <input
               type="number"
               min="0"
@@ -621,31 +675,31 @@ export default function PosPage() {
               className="font-mono"
               style={{
                 width: '130px',
-                height: '34px',
+                height: '36px',
                 padding: '4px 10px',
                 textAlign: 'right',
                 background: 'var(--bg-input)',
-                border: '1px solid rgba(16, 185, 129, 0.4)',
+                border: '1.5px solid var(--success)',
                 borderRadius: '6px',
-                color: '#34d399',
-                fontWeight: 700,
+                color: 'var(--success)',
+                fontWeight: 800,
                 fontSize: '15px'
               }}
             />
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '12px', marginTop: '2px' }}>
-            <span>Status / Khata Balance:</span>
+            <span style={{ color: 'var(--text-secondary)' }}>Status / Settlement:</span>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Badge variant={paymentStatus}>
                 {paymentStatus}
               </Badge>
               {balanceDue > 0 ? (
-                <span className="font-mono" style={{ color: '#fb7185', fontWeight: 700 }}>
+                <span className="font-mono" style={{ color: 'var(--danger)', fontWeight: 800 }}>
                   Due: Rs {balanceDue.toFixed(2)}
                 </span>
               ) : changeDue > 0 ? (
-                <span className="font-mono" style={{ color: '#34d399', fontWeight: 700 }}>
+                <span className="font-mono" style={{ color: 'var(--success)', fontWeight: 800 }}>
                   Change: Rs {changeDue.toFixed(2)}
                 </span>
               ) : null}
@@ -657,9 +711,9 @@ export default function PosPage() {
           <div style={{
             padding: '10px 12px',
             borderRadius: '8px',
-            backgroundColor: 'rgba(244, 63, 94, 0.12)',
+            backgroundColor: 'var(--danger-subtle)',
             border: '1px solid rgba(244, 63, 94, 0.3)',
-            color: '#fda4af',
+            color: '#fb7185',
             fontSize: '12px'
           }}>
             {checkoutError}
@@ -673,7 +727,7 @@ export default function PosPage() {
           style={{ width: '100%', marginTop: '4px', gap: '8px' }}
         >
           <CreditCard size={18} />
-          <span>{checkingOut ? 'Processing ACID Transaction...' : 'Complete & Generate Receipt'}</span>
+          <span>{checkingOut ? 'Executing ACID Transaction...' : 'Complete & Generate Receipt'}</span>
         </button>
       </div>
 

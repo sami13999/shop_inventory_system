@@ -1,9 +1,9 @@
 import React from 'react';
 
-export default function Badge({ children, variant = 'neutral', icon: Icon }) {
+export default function Badge({ children, variant = 'neutral', icon: Icon, showDot = true }) {
   let badgeClass = 'badge badge-neutral';
 
-  switch (variant) {
+  switch (variant?.toLowerCase()) {
     case 'success':
     case 'paid':
       badgeClass = 'badge badge-success';
@@ -26,6 +26,7 @@ export default function Badge({ children, variant = 'neutral', icon: Icon }) {
 
   return (
     <span className={badgeClass}>
+      {showDot && <span className="badge-dot" />}
       {Icon && <Icon size={12} />}
       {children}
     </span>
