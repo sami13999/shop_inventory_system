@@ -726,6 +726,186 @@ button, input, select, textarea {
 }
 
 /* ==========================================================================
+   POS Terminal Pro Styles
+   ========================================================================== */
+.pos-categories-scroll {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 4px 2px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.pos-categories-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.pos-cat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 14px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
+  cursor: pointer;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-subtle);
+  color: var(--text-secondary);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+}
+
+.pos-cat-pill:hover {
+  background: var(--bg-card-hover);
+  color: var(--text-primary);
+  border-color: var(--border-hover);
+  transform: translateY(-1px);
+}
+
+.pos-cat-pill.active {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 3px 12px var(--primary-glow);
+  transform: translateY(-1px);
+}
+
+.pos-cat-pill .cat-count {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.18);
+  font-weight: 800;
+}
+
+.pos-cat-pill:not(.active) .cat-count {
+  background: var(--bg-card);
+  color: var(--text-muted);
+}
+
+/* POS Product Cards */
+.pos-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 14px;
+  border-radius: var(--radius-lg);
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.pos-card:hover:not(.out-of-stock) {
+  border-color: var(--border-hover);
+  box-shadow: var(--shadow-md), 0 0 20px var(--primary-glow);
+  transform: translateY(-2px);
+}
+
+.pos-card.in-cart {
+  border: 2px solid var(--primary);
+  box-shadow: 0 0 22px var(--primary-glow);
+  background: linear-gradient(180deg, var(--bg-card) 0%, var(--primary-subtle) 100%);
+}
+
+.pos-card.out-of-stock {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(0.5);
+}
+
+.pos-stepper-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.pos-stepper-btn:hover:not(:disabled) {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+  transform: scale(1.05);
+}
+
+.pos-stepper-btn:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.pos-cart-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-subtle);
+  transition: all 0.2s ease;
+}
+
+.pos-cart-row:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-hover);
+}
+
+.pos-quick-note {
+  flex: 1;
+  padding: 6px 4px;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-card);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: center;
+}
+
+.pos-quick-note:hover {
+  background: var(--primary-subtle);
+  color: var(--primary);
+  border-color: var(--primary);
+  transform: translateY(-1px);
+}
+
+.pos-quick-note:active {
+  transform: scale(0.95);
+}
+
+.pos-scan-toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+  padding: 12px 18px;
+  background: var(--bg-card-solid);
+  border: 1px solid var(--success);
+  border-radius: var(--radius-md);
+  color: var(--success);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 20px var(--success-glow);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 13px;
+  animation: slideUpFade 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==========================================================================
    Thermal Printable Receipt Styles
    ========================================================================== */
 @media print {
