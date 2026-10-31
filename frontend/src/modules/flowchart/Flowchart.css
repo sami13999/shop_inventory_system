@@ -1,0 +1,647 @@
+/* ==========================================================================
+   AuraPOS Interactive Architecture Flowchart Styles
+   ========================================================================== */
+
+.flowchart-page {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+}
+
+/* Control Bar */
+.flowchart-controls-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 10px 16px;
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  flex-wrap: wrap;
+}
+
+.controls-left, .controls-center, .controls-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Mode Pills */
+.mode-pill-group {
+  display: flex;
+  background: var(--bg-subtle);
+  padding: 2px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+}
+
+.mode-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mode-pill:hover {
+  color: var(--text-primary);
+}
+
+.mode-pill.active {
+  background: var(--primary);
+  color: #ffffff;
+  box-shadow: 0 2px 8px var(--primary-glow);
+}
+
+/* Filter Dropdown & Buttons */
+.filter-select {
+  background: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  padding: 5px 10px;
+  border-radius: var(--radius-md);
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+}
+
+.filter-select:focus {
+  border-color: var(--border-focus);
+}
+
+/* Simulation HUD Banner */
+.sim-hud-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 10px 16px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(90deg, rgba(99, 102, 241, 0.18) 0%, rgba(139, 92, 246, 0.18) 100%);
+  border: 1px solid rgba(99, 102, 241, 0.4);
+  box-shadow: 0 4px 18px rgba(99, 102, 241, 0.15);
+  animation: slideDownFade 0.25s ease;
+}
+
+.sim-hud-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sim-step-badge {
+  font-size: 10.5px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: var(--radius-xs);
+  background: var(--primary);
+  color: #ffffff;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  box-shadow: 0 0 10px var(--primary-glow);
+}
+
+.sim-hud-text {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.sim-hud-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Flowchart Main Canvas Container */
+.flowchart-viewport {
+  position: relative;
+  width: 100%;
+  min-height: 645px;
+  height: 645px;
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  user-select: none;
+}
+
+/* Grid background pattern */
+.flowchart-grid-bg {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 28px 28px;
+  pointer-events: none;
+}
+
+[data-theme="light"] .flowchart-grid-bg {
+  background-image: 
+    radial-gradient(rgba(15, 23, 42, 0.08) 1px, transparent 1px),
+    linear-gradient(to right, rgba(15, 23, 42, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(15, 23, 42, 0.03) 1px, transparent 1px);
+}
+
+/* Interactive Cursor Spotlight Halo */
+.cursor-spotlight-torch {
+  position: absolute;
+  width: 480px;
+  height: 480px;
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.18) 0%, rgba(139, 92, 246, 0.09) 40%, transparent 70%);
+  filter: blur(6px);
+  transition: opacity 0.2s ease;
+  z-index: 1;
+}
+
+/* SVG Connection Overlay */
+.flowchart-svg-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Flowchart Cable Paths */
+.flow-cable {
+  fill: none;
+  stroke: rgba(148, 163, 184, 0.22);
+  stroke-width: 2;
+  transition: all 0.3s ease;
+}
+
+.flow-cable.active-connection {
+  stroke: var(--primary);
+  stroke-width: 3.5;
+  filter: drop-shadow(0 0 6px var(--primary-glow));
+}
+
+.flow-cable.highlighted-connection {
+  stroke: #06b6d4;
+  stroke-width: 3;
+  filter: drop-shadow(0 0 8px rgba(6, 182, 212, 0.5));
+}
+
+.flow-cable.blurred {
+  opacity: 0.1;
+  filter: blur(2px);
+}
+
+/* Animated Flowing Particles / Dash along Cables */
+.flow-pulse-cable {
+  fill: none;
+  stroke: #818cf8;
+  stroke-width: 2.5;
+  stroke-dasharray: 6 12;
+  animation: flowCableDash 1.2s linear infinite;
+  opacity: 0.85;
+}
+
+.flow-pulse-cable.inward {
+  stroke: #10b981;
+  animation: flowCableDash 1.0s linear infinite;
+}
+
+.flow-pulse-cable.outward {
+  stroke: #f43f5e;
+  animation: flowCableDash 1.0s linear infinite;
+}
+
+.flow-pulse-cable.trigger {
+  stroke: #f59e0b;
+  animation: flowCableDash 0.8s linear infinite;
+}
+
+@keyframes flowCableDash {
+  from {
+    stroke-dashoffset: 36;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Swimlane Headers */
+.swimlanes-header {
+  position: absolute;
+  top: 8px;
+  left: 0;
+  right: 0;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  padding: 0 25px;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.swimlane-col-label {
+  text-align: center;
+  padding: 5px 10px;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  margin: 0 6px;
+}
+
+.swimlane-col-title {
+  font-size: 10.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.swimlane-col-subtitle {
+  font-size: 9px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* Nodes Canvas Layer */
+.flowchart-nodes-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+}
+
+/* Flow Node Card */
+.flow-node-card {
+  position: absolute;
+  background: var(--bg-card-solid);
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 10px 12px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: var(--shadow-sm);
+  transition: 
+    filter 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+    opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+  user-select: none;
+  overflow: hidden;
+}
+
+/* Focus and Blur States */
+.flow-node-card.focused {
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 32px var(--primary-glow), 0 8px 24px -4px rgba(0, 0, 0, 0.5) !important;
+  transform: scale(1.06) !important;
+  z-index: 20 !important;
+  filter: none !important;
+  opacity: 1 !important;
+}
+
+.flow-node-card.connected-focus {
+  border-color: #06b6d4 !important;
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.35) !important;
+  transform: scale(1.02) !important;
+  z-index: 15 !important;
+  filter: none !important;
+  opacity: 0.96 !important;
+}
+
+.flow-node-card.sim-active {
+  border-color: #10b981 !important;
+  box-shadow: 0 0 35px rgba(16, 185, 129, 0.6) !important;
+  transform: scale(1.08) !important;
+  z-index: 25 !important;
+  animation: pulseGlowSim 1.2s infinite ease-in-out;
+  filter: none !important;
+  opacity: 1 !important;
+}
+
+@keyframes pulseGlowSim {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(16, 185, 129, 0.9), 0 0 15px #10b981;
+  }
+}
+
+/* THE REQUESTED BLUR STATE: When another node is focused, all others blur */
+.flow-node-card.blurred {
+  filter: blur(5.5px) grayscale(0.55);
+  opacity: 0.2;
+  transform: scale(0.96);
+  pointer-events: auto;
+}
+
+.flow-node-card.blurred:hover {
+  filter: none !important;
+  opacity: 1 !important;
+  transform: scale(1.05) !important;
+  z-index: 30 !important;
+}
+
+/* Node Inner Layout */
+.node-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.node-icon-wrapper {
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.node-type-tag {
+  font-size: 8px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 1px 5px;
+  border-radius: var(--radius-xs);
+}
+
+.node-title {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.node-desc {
+  font-size: 10px;
+  color: var(--text-secondary);
+  line-height: 1.3;
+  margin-bottom: 4px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.node-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 4px;
+  font-size: 9px;
+  color: var(--text-muted);
+}
+
+.node-table-badge {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: var(--bg-subtle);
+  padding: 1px 5px;
+  border-radius: 4px;
+  border: 1px solid var(--border-subtle);
+  max-width: 130px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Node Anchor Ports */
+.node-port {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--primary);
+  border: 1.5px solid var(--bg-main);
+  box-shadow: 0 0 5px var(--primary-glow);
+}
+
+.node-port.port-in {
+  left: -3.5px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.node-port.port-out {
+  right: -3.5px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Category Accent Colors */
+.cat-procurement .node-icon-wrapper {
+  background: rgba(139, 92, 246, 0.15);
+  color: #a78bfa;
+}
+.cat-procurement .node-type-tag {
+  background: rgba(139, 92, 246, 0.15);
+  color: #a78bfa;
+}
+
+.cat-inventory .node-icon-wrapper {
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+}
+.cat-inventory .node-type-tag {
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+}
+
+.cat-pos .node-icon-wrapper {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+}
+.cat-pos .node-type-tag {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+}
+
+.cat-billing .node-icon-wrapper {
+  background: rgba(244, 63, 94, 0.15);
+  color: #fb7185;
+}
+.cat-billing .node-type-tag {
+  background: rgba(244, 63, 94, 0.15);
+  color: #fb7185;
+}
+
+.cat-khata .node-icon-wrapper {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+}
+.cat-khata .node-type-tag {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+}
+
+.cat-trigger .node-icon-wrapper {
+  background: rgba(236, 72, 153, 0.15);
+  color: #f472b6;
+}
+.cat-trigger .node-type-tag {
+  background: rgba(236, 72, 153, 0.15);
+  color: #f472b6;
+}
+
+.cat-analytics .node-icon-wrapper {
+  background: rgba(99, 102, 241, 0.15);
+  color: #818cf8;
+}
+.cat-analytics .node-type-tag {
+  background: rgba(99, 102, 241, 0.15);
+  color: #818cf8;
+}
+
+.cat-auth .node-icon-wrapper {
+  background: rgba(20, 184, 166, 0.15);
+  color: #2dd4bf;
+}
+.cat-auth .node-type-tag {
+  background: rgba(20, 184, 166, 0.15);
+  color: #2dd4bf;
+}
+
+/* Node Detail Inspector Drawer & Overlay */
+.drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 99998;
+  animation: fadeIn 0.2s ease;
+}
+
+.node-inspector-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 440px;
+  height: 100vh;
+  background: var(--bg-card-solid);
+  border-left: 1px solid var(--border-card);
+  box-shadow: -10px 0 40px rgba(0, 0, 0, 0.65);
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  animation: slideInRight 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.inspector-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-header);
+}
+
+.inspector-body {
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.inspector-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.inspector-section-title {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.sql-code-box {
+  background: #090d16;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #38bdf8;
+  line-height: 1.45;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+/* Legend Bar */
+.flowchart-legend {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 8px 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-md);
+  font-size: 11px;
+  flex-wrap: wrap;
+}
+
+.legend-items {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--text-secondary);
+}
+
+.legend-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}

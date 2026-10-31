@@ -15,6 +15,7 @@ import CustomersPage from './modules/customers/CustomersPage';
 import SuppliersPage from './modules/suppliers/SuppliersPage';
 import PurchasesPage from './modules/purchases/PurchasesPage';
 import BillsPage from './modules/bills/BillsPage';
+import FlowchartPage from './modules/flowchart/FlowchartPage';
 
 function ProtectedRoute({ children }) {
   const { isAuthenticated, loading } = useAuth();
@@ -75,6 +76,7 @@ export default function App() {
               <Route path="suppliers" element={<SuppliersPage />} />
               <Route path="purchases" element={<PurchasesPage />} />
               <Route path="bills" element={<BillsPage />} />
+              <Route path="flowchart" element={<FlowchartPage />} />
             </Route>
 
             {/* Catch-all redirect */}

@@ -10,7 +10,8 @@ import {
   TrendingUp, 
   LogOut,
   Store,
-  PanelLeftClose
+  PanelLeftClose,
+  GitBranch
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
@@ -25,6 +26,7 @@ export default function Sidebar({ isOpen = true, onToggle }) {
     { to: '/suppliers', label: 'Suppliers', icon: Truck },
     { to: '/purchases', label: 'Stock Purchases', icon: TrendingUp },
     { to: '/bills', label: 'Sales Invoices', icon: Receipt },
+    { to: '/flowchart', label: 'System Flowchart', icon: GitBranch, badge: 'FLOW' },
   ];
 
   return (

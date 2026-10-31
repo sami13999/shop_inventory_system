@@ -35,6 +35,8 @@ export default function AppLayout() {
         return { title: 'Stock Procurement', subtitle: 'Intake supplier inventory orders with automated stock increment' };
       case '/bills':
         return { title: 'Sales Invoices & History', subtitle: 'Review customer receipts and manage payment settlements' };
+      case '/flowchart':
+        return { title: 'Interactive System Architecture Flowchart', subtitle: 'Live animated end-to-end data pipelines, triggers, and POS-inventory workflows' };
       default:
         return { title: 'AuraPOS Management System', subtitle: '' };
     }
